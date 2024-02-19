@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'vm2'
+        docker { image 'python:3' }
     }
 
     stages {
@@ -50,25 +50,17 @@ pipeline {
             }
         }
 
-        // stage('Push ⬆️') {
-        //     steps {
-        //         sh 'docker push cheiby/jenkins-assingment:lastest'
-        //     }
-        // }
-        // stage('Clean Workspace') {
-        //     steps {
-        //         echo 'DownTime'
-        //         sh 'docker compose -f ./docker-compose.dev.yaml down'
-        //         sh 'docker system prune -a -f'
-        //     }
-        // }
-        stage('Running Preprod') {
-            agent {
-                label 'vm3'
-            }
-            steps {
-                sh 'docker compose down && docker system prune -a -f && docker compose up -d --build'
+    }
+
+    /*
+    post {
+        always {
+            script {
+                // Clean up after the pipeline
+                sh 'docker stop $(docker ps -aq)'
+                sh 'docker rm $(docker ps -aq)'
             }
         }
     }
+    */
 }
